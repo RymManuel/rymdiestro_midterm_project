@@ -194,7 +194,7 @@
                         <select id="edit_category_id" name="category_id" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
                             <option value="">Select a category</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -213,14 +213,14 @@
     </div>
 
     <script>
-        function editBook(id, title, author, isbn, categoryId) {
+        function editBook(id, title, author, isbn, category_id) {
             document.getElementById('editBookModal').classList.remove('hidden');
             document.getElementById('editBookModal').classList.add('flex');
             document.getElementById('editBookForm').action = `/books/${id}`;
             document.getElementById('edit_title').value = title;
             document.getElementById('edit_author').value = author;
             document.getElementById('edit_isbn').value = isbn;
-            document.getElementById('edit_category_id').value = categoryId || '';
+            document.getElementById('edit_category_id').value = category_id || '';
         }
 
         function closeEditBookModal() {

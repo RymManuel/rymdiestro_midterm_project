@@ -69,7 +69,7 @@
                                             <span class="category-description-display">{{ Str::limit($category->description, 50) ?? 'N/A' }}</span>
                                         </td>
                                         <td class="px-4 py-3 text-center text-sm">
-                                            <button onclick="editCategory({{ $category->id }}, '{{ $category->category_name }}', '{{ addslashes($category->description) }}')"
+                                            <button onclick="editCategory({{ $category->id }}, '{{ $category->name }}', '{{ addslashes($category->description) }}')"
                                                     class="text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                                                 Edit
                                             </button>
@@ -110,7 +110,7 @@
                 <div class="grid gap-4 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Category Name</label>
-                        <input type="text" id="edit_category_name" name="category_name" required
+                        <input type="text" id="edit_name" name="name" required
                                class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
                     </div>
 
@@ -140,7 +140,7 @@
             document.getElementById('editCategoryModal').classList.remove('hidden');
             document.getElementById('editCategoryModal').classList.add('flex');
             document.getElementById('editCategoryForm').action = `/categories/${id}`;
-            document.getElementById('edit_category_name').value = name;
+            document.getElementById('edit_name').value = name;
             document.getElementById('edit_description').value = description || '';
         }
 
