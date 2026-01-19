@@ -3,7 +3,7 @@
 
         <!-- Success Message -->
         @if(session('success'))
-            <div class="rounded-lg bg-green-100 p-4 text-green-700 dark:bg-green-900/30 dark:text-green-300"> 
+            <div class="rounded-lg bg-green-100 p-4 text-green-700 dark:bg-green-900/30 dark:text-green-300">
                 {{ session('success') }}
             </div>
         @endif
@@ -14,7 +14,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Total Books</p>
-                        <h3 class="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-100">{{ $books->count() }}</h3>
+                        <h3 class="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-100">{{ $books->total() }}</h3>
                     </div>
                     <div class="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
                         <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,6 +37,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="relative overflow-hidden rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800">
                 <div class="flex items-center justify-between">
                     <div>
@@ -52,159 +53,214 @@
             </div>
         </div>
 
-        
-
-        <!-- Book Management Section -->
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-            <div class="flex h-full flex-col p-6">
-                <!-- Add New Book Form -->
-                <div class="mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-700 dark:bg-neutral-900/50">
-                    <h2 class="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">Add New Book</h2>
-
-                    <form action="{{ route('books.store') }}" method="POST" class="grid gap-4 md:grid-cols-2">
-                        @csrf
-
+        <!-- Main Content -->
+        <div class="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800">
+            <!-- Add Book Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">Add New Book</h2>
+                <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data" class="mt-4 space-y-4">
+                    @csrf
+                    <div class="grid gap-4 md:grid-cols-2">
                         <div>
-                            <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Title</label>
-                            <input type="text" name="title" value="{{ old('title') }}" placeholder="Enter book title" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Title</label>
+                            <input type="text" name="title" required class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400" placeholder="Enter book title">
                             @error('title')
-                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <span class="mt-1 block text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div>
-                            <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Author</label>
-                            <input type="text" name="author" value="{{ old('author') }}" placeholder="Enter author name" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Author</label>
+                            <input type="text" name="author" required class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400" placeholder="Enter author name">
                             @error('author')
-                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <span class="mt-1 block text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div>
-                            <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">ISBN</label>
-                            <input type="text" name="isbn" value="{{ old('isbn') }}" placeholder="Enter ISBN" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">ISBN</label>
+                            <input type="text" name="isbn" required class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400" placeholder="Enter ISBN">
                             @error('isbn')
-                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <span class="mt-1 block text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <div class="md:col-span-1">
-                            <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Category</label>
-                            <select name="category_id" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Category</label>
+                            <select name="category_id" class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100">
                                 <option value="">Select a category</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }} ({{ $category->description }})
-                                    </option>
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                             @error('category_id')
-                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <span class="mt-1 block text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <div class="md:col-span-2 flex justify-end">
-                            <button type="submit" class="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
-                                Add Book
-                            </button>
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Photo (JPG, PNG only - Max 2MB)</label>
+                            <input type="file" name="photo" accept="image/jpeg,image/png" class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 file:mr-2 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1 file:text-sm file:font-medium file:text-white transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:file:bg-blue-700">
+                            @error('photo')
+                                <span class="mt-1 block text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
+                            @enderror
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                <!-- Book List Table -->
-                <div class="flex-1 overflow-auto">
-                    <h2 class="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">Book List</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full min-w-full">
-                            <thead>
-                                <tr class="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/50">
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">#</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Title</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Author</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">ISBN</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Category</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
-                                @forelse($books as $book)
-                                    <tr class="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                                        <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $loop->iteration }}</td>
-                                        <td class="px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100">{{ $book->title }}</td>
-                                        <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $book->author }}</td>
-                                        <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $book->isbn }}</td>
-                                        <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
-                                            {{ $book->category ? $book->category->name : 'N/A' }}
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            <button onclick="editBook({{ $book->id }}, '{{ $book->title }}', '{{ $book->author }}', '{{ $book->isbn }}', {{ $book->category_id }})"
-                                                    class="text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-                                                Edit
-                                            </button>
-                                            <span class="mx-1 text-neutral-400">|</span>
-                                            <form action="{{ route('books.destroy', $book) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this book?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="px-4 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
-                                            No books found. Add your first book above!
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                    <div class="flex justify-end">
+                        <button type="submit" class="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700 dark:hover:bg-blue-800">
+                            Add Book
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <hr class="my-6 border-neutral-200 dark:border-neutral-700">
+
+            <!-- Search and Filter Section -->
+            <div class="mb-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">Books Management</h2>
+                    <div class="flex gap-2">
+                        <a href="{{ route('books.trash') }}" class="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-700 dark:hover:bg-orange-800">
+                            Trash <span class="ml-1 inline-block rounded-full bg-orange-700 px-2 py-0.5 text-xs">{{ \App\Models\Book::onlyTrashed()->count() }}</span>
+                        </a>
+                        <a href="{{ route('books.export-pdf', ['search' => request('search'), 'category' => request('category')]) }}" class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 dark:hover:bg-green-800">
+                            Export PDF
+                        </a>
                     </div>
                 </div>
+
+                <form method="GET" action="{{ route('dashboard') }}" class="space-y-3">
+                    <div class="grid gap-3 md:grid-cols-3">
+                        <div>
+                            <input type="text" name="search" placeholder="Search by title or author..." value="{{ request('search') }}" class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400">
+                        </div>
+                        <div>
+                            <select name="category" class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit" class="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 dark:hover:bg-blue-800">Search</button>
+                            <a href="{{ route('dashboard') }}" class="flex-1 rounded-lg border border-neutral-300 bg-white px-4 py-2 text-center font-medium text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700">Clear</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Books Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/50">
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">#</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Photo</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Title</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Author</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">ISBN</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Category</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-neutral-700 dark:text-neutral-300">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
+                        @forelse($books as $book)
+                            <tr class="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                                <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $loop->iteration + ($books->currentPage() - 1) * $books->perPage() }}</td>
+                                <td class="px-4 py-3 text-sm">
+                                    @if($book->photo)
+                                        <img src="{{ $book->getPhotoPath() }}" alt="{{ $book->title }}" class="h-10 w-10 rounded-full object-cover">
+                                    @else
+                                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                                            {{ $book->getInitials() }}
+                                        </div>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ $book->title }}</td>
+                                <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $book->author }}</td>
+                                <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $book->isbn }}</td>
+                                <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">
+                                    <span class="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                                        {{ $book->category ? $book->category->name : 'N/A' }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm">
+                                    <button onclick="editBook({{ $book->id }}, '{{ addslashes($book->title) }}', '{{ addslashes($book->author) }}', '{{ $book->isbn }}', {{ $book->category_id }})"
+                                            class="text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                                        Edit
+                                    </button>
+                                    <span class="mx-1 text-neutral-400">|</span>
+                                    <form action="{{ route('books.destroy', $book) }}" method="POST" class="inline" onsubmit="return confirm('Move this book to trash?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-4 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                                    No books found. Add your first book above!
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-6">
+                {{ $books->links('pagination::tailwind') }}
             </div>
         </div>
     </div>
 
     <!-- Edit Book Modal -->
-    <div id="editBookModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
-        <div class="w-full max-w-2xl rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800">
-            <h2 class="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">Edit Book</h2>
-
-            <form id="editBookForm" method="POST">
+    <div id="editBookModal" class="fixed inset-0 hidden flex items-center justify-center bg-black/50 z-50">
+        <div class="w-full max-w-md rounded-lg bg-white p-6 dark:bg-neutral-800">
+            <h2 class="mb-4 text-lg font-bold text-neutral-900 dark:text-neutral-100">Edit Book</h2>
+            <form id="editBookForm" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 @method('PUT')
 
-                <div class="grid gap-4 md:grid-cols-2">
-                    <div>
-                        <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Title</label>
-                        <input type="text" id="edit_title" name="title" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
-                    </div>
-
-                    <div>
-                        <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Author</label>
-                        <input type="text" id="edit_author" name="author" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
-                    </div>
-
-                    <div>
-                        <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">ISBN</label>
-                        <input type="text" id="edit_isbn" name="isbn" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
-                    </div>
-
-                    <div>
-                        <label class="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">Category</label>
-                        <select id="edit_category_id" name="category_id" required class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100">
-                            <option value="">Select a category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Title</label>
+                    <input type="text" id="edit_title" name="title" required class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400">
                 </div>
 
-                <div class="mt-6 flex justify-end gap-3">
-                    <button type="button" onclick="closeEditBookModal()" class="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700">
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Author</label>
+                    <input type="text" id="edit_author" name="author" required class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">ISBN</label>
+                    <input type="text" id="edit_isbn" name="isbn" required class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder-neutral-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-400">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Category</label>
+                    <select id="edit_category_id" name="category_id" class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100">
+                        <option value="">Select a category</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Photo (JPG, PNG only - Max 2MB)</label>
+                    <input type="file" name="photo" accept="image/jpeg,image/png" class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-2 text-neutral-900 file:mr-2 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1 file:text-sm file:font-medium file:text-white transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:file:bg-blue-700">
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeEditBookModal()" class="rounded-lg border border-neutral-300 bg-white px-4 py-2 font-medium text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700">
                         Cancel
                     </button>
-                    <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+                    <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 dark:hover:bg-blue-800">
                         Update Book
                     </button>
                 </div>

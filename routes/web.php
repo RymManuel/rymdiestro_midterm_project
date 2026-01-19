@@ -41,6 +41,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+    
+    // Trash management routes
+    Route::get('/books/trash', [BookController::class, 'trash'])->name('books.trash');
+    Route::post('/books/{book}/restore', [BookController::class, 'restore'])->name('books.restore');
+    Route::delete('/books/{book}/force', [BookController::class, 'forceDelete'])->name('books.force-delete');
+    
+    // PDF export route
+    Route::get('/books/export/pdf', [BookController::class, 'exportPdf'])->name('books.export-pdf');
 });
 
 // Category routes - CRUD operations
